@@ -1,18 +1,14 @@
 pipeline {
     agent any
     tools { nodejs "NODEJS" }
-    
-    environment {
-        PATH = "$PATH:/usr/local/bin"
-    }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Harshal77777/Angular-jenkins.git'
+                git branch: 'main', url: 'https://github.com/Harshal77777/Angular-jenkins.git'
             }
         }
-        
+
         stage('Build') {
             steps {
                 sh 'npm install'
@@ -29,9 +25,7 @@ pipeline {
 
         stage('Approval') {
             steps {
-                input {
-                    message "Finished using the website? (Click 'Proceed' to continue)"
-                }
+                input message: "Finished using the website? Click 'Proceed' to continue."
             }
         }
 
@@ -42,4 +36,3 @@ pipeline {
         }
     }
 }
-
