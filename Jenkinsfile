@@ -10,15 +10,15 @@ pipeline {
             }
         }
 
-        stage('Build Angular App') {
-            steps {
-                sh 'ng build --configuration production'
-            }
-        }
-
         stage('Serve Angular App') {
             steps {
-                sh 'nohup ng serve --host 0.0.0.0 --port 4200 &'
+                sh '''
+                if [ ! -d "dist/my-angular-app" ]; then
+                    echo "Error: Build directory not found! Please run 'ng build' locally first."
+                    exit 1
+                fi
+                nohup npx serve -s dist/my-angular-app -l 4200 &
+                '''
             }
         }
     }
