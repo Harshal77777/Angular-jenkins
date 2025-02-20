@@ -1,16 +1,23 @@
 pipeline {
     agent any
     tools { nodejs "NODEJS" }
+
     stages {
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'ng build --configuration production'
             }
         }
-        stage('Serve') {
+
+        stage('Build Angular App') {
             steps {
-                sh 'nohup ng serve --host 0.0.0.0 --port 4200 > ng.log 2>&1 &'
+                sh 'npm run build -- --configuration production'
+            }
+        }
+
+        stage('Serve Angular App') {
+            steps {
+                sh 'nohup npm run start -- --host 0.0.0.0 --port 4200 &'
             }
         }
     }
